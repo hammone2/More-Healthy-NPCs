@@ -7,7 +7,7 @@ public class StandardHealth : MonoBehaviour, IHealth
 
     private int currentHealth;
 
-    public event Action<float> OnHPPctChanged = delegate { };
+    public event Action<float, float> OnHPPctChanged = delegate { };
     public event Action OnDied = delegate { };
 
     private void Start()
@@ -15,21 +15,13 @@ public class StandardHealth : MonoBehaviour, IHealth
         currentHealth = startingHealth;
     }
 
-    public float CurrentHpPct
-    {
-        get { return (float)currentHealth / (float)startingHealth; }
-    }
-
     public void TakeDamage(int amount)
     {
-        if (amount <= 0)
-            throw new ArgumentOutOfRangeException("Invalid Damage amount specified: " + amount);
-
         currentHealth -= amount;
 
-        OnHPPctChanged(CurrentHpPct);
+        OnHPPctChanged(currentHealth, startingHealth);
 
-        if (CurrentHpPct <= 0)
+        if (currentHealth <= 0)
             Die();
     }
 

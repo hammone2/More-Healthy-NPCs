@@ -1,9 +1,11 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class HPBar : MonoBehaviour
 {
     private Slider slider;
+    [SerializeField] private TextMeshProUGUI hpText;
 
     private void Start()
     {
@@ -11,8 +13,15 @@ public class HPBar : MonoBehaviour
         GetComponentInParent<IHealth>().OnHPPctChanged += HandleHPPctChanged;
     }
 
-    private void HandleHPPctChanged(float pct)
+    private void HandleHPPctChanged(float newHp, float totalHp)
     {
-        slider.value = pct;
+        float roundedHp = (float)System.Math.Round(newHp, 2);
+        slider.value = newHp / totalHp;
+        UpdateText(roundedHp.ToString() + "/" + totalHp.ToString());
+    }
+
+    public void UpdateText(string text)
+    {
+        hpText.SetText(text);
     }
 }

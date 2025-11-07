@@ -13,13 +13,8 @@ public class NumberOfHitsHealth : MonoBehaviour, IHealth
     private int hitsRemaining;
     private bool canTakeDamage = true;
 
-    public event Action<float> OnHPPctChanged = delegate (float f) { };
+    public event Action<float, float> OnHPPctChanged = delegate (float f1, float f2) { };
     public event Action OnDied = delegate { };
-
-    public float CurrentHpPct
-    {
-        get { return (float)hitsRemaining / (float)healthInHits; }
-    }
 
     private void Start()
     {
@@ -34,7 +29,7 @@ public class NumberOfHitsHealth : MonoBehaviour, IHealth
 
             hitsRemaining--;
 
-            OnHPPctChanged(CurrentHpPct);
+            OnHPPctChanged((float)hitsRemaining, (float)healthInHits);
 
             if (hitsRemaining <= 0)
                 OnDied();
